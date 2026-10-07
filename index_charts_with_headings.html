@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chart.js Tutorial</title>
+    <style>
+        body {
+
+            font-family: Arial;
+            padding: 20px;
+            background-image: url("1.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+
+        }
+
+        .chart-container {
+            width: 600px;
+            margin: auto;
+        }
+
+        .chart-heading {
+            text-align: center;
+            margin: 35px 0 15px;
+            font-size: 22px;
+        }
+
+        .chart-container canvas {
+            display: block;
+            margin: 0 auto 45px;
+        }
+
+        .chart-container canvas {
+            border: none;
+            box-shadow: none;
+            outline: none;
+        }
+
+
+        /* Clean chart controls - no box/border around the charts */
+        .chart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 0 auto 18px;
+            flex-wrap: wrap;
+        }
+
+        .chart-controls select {
+            min-width: 180px;
+            padding: 10px 38px 10px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            background: #fff;
+            border: 1px solid #d6d6d6;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .chart-controls select:hover {
+            border-color: #999;
+        }
+
+        .chart-controls select:focus {
+            border-color: #777;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07);
+        }
+
+        .chart-controls button {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: #333;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .chart-controls button:hover {
+            background: #111;
+        }
+
+        .chart-controls button:active {
+            transform: translateY(1px);
+        }
+
+        .chart-controls button:focus-visible {
+            outline: 3px solid rgba(0, 0, 0, 0.15);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 520px) {
+            .chart-controls {
+                align-items: stretch;
+            }
+
+            .chart-controls select,
+            .chart-controls button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chart-container">
+
+        <h3 class="chart-heading">Bar Chart - Sales Comparison</h3>
+        <div class="chart-controls">
+            <select id="list1" aria-label="Bar chart list">
+                <option value="sales">Sales</option>
+                <option value="sales2023">Sales 2023</option>
+                <option value="sales2024">Sales 2024</option>
+                <option value="sales2025">Sales 2025</option>
+                <option value="sales2026">Sales 2026</option>
+            </select>
+            <button type="button" id="update1">Update Chart</button>
+        </div>
+        <canvas id="myChart1"></canvas>
+
+        <h3 class="chart-heading">Line Chart - Revenue</h3>
+        <div class="chart-controls">
+            <select id="list2" aria-label="Line chart list">
+                <option value="revenue">Revenue</option>
+                <option value="revenue2023">Revenue 2023</option>
+                <option value="revenue2024">Revenue 2024</option>
+                <option value="revenue2025">Revenue 2025</option>
+                <option value="revenue2026">Revenue 2026</option>
+            </select>
+            <button type="button" id="update2">Update Chart</button>
+        </div>
+        <canvas id="myChart2"></canvas>
+
+        <h3 class="chart-heading">Pie Chart - Color Distribution</h3>
+        <div class="chart-controls">
+            <select id="list3" aria-label="Pie chart list">
+                <option value="colors">Color Distribution</option>
+                <option value="colors2">Product Color Distribution</option>
+                <option value="colors3">Customer Color Preference</option>
+            </select>
+            <button type="button" id="update3">Update Chart</button>
+        </div>
+        <canvas id="myChart3"></canvas>
+
+        <h3 class="chart-heading">Doughnut Chart - Category Distribution</h3>
+        <div class="chart-controls">
+            <select id="list4" aria-label="Doughnut chart list">
+                <option value="categories">Category Distribution</option>
+                <option value="categories2">Sales Category Distribution</option>
+                <option value="categories3">Customer Category Distribution</option>
+            </select>
+            <button type="button" id="update4">Update Chart</button>
+        </div>
+        <canvas id="myChart4"></canvas>
+
+        <h3 class="chart-heading">Radar Chart - Player Performance</h3>
+        <div class="chart-controls">
+            <select id="list5" aria-label="Radar chart list">
+                <option value="player1">Player 1</option>
+                <option value="player2">Player 2</option>
+                <option value="player3">Player 3</option>
+                <option value="player4">Player 4</option>
+            </select>
+            <button type="button" id="update5">Update Chart</button>
+        </div>
+        <canvas id="myChart5"></canvas>
+
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // All datasets for the dropdown options
+        const chartData = {
+            // BAR CHART
+            sales: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                label: 'Sales',
+                data: [10, 10, 10, 10],
+                backgroundColor: ['red', 'blue', 'green', 'orange']
+            },
+            sales2023: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                label: 'Sales 2023',
+                data: [12, 19, 3, 5],
+                backgroundColor: ['red', 'blue', 'green', 'orange']
+            },
+            sales2024: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                label: 'Sales 2024',
+                data: [18, 24, 12, 21],
+                backgroundColor: ['red', 'blue', 'green', 'orange']
+            },
+            sales2025: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                label: 'Sales 2025',
+                data: [25, 17, 29, 35],
+                backgroundColor: ['red', 'blue', 'green', 'orange']
+            },
+            sales2026: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                label: 'Sales 2026',
+                data: [32, 28, 41, 38],
+                backgroundColor: ['red', 'blue', 'green', 'orange']
+            },
+
+            // LINE CHART
+            revenue: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                label: 'Revenue',
+                data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+            },
+            revenue2023: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                label: 'Revenue 2023',
+                data: [12, 18, 29, 22, 38, 61, 49, 45, 72, 84, 130, 145]
+            },
+            revenue2024: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                label: 'Revenue 2024',
+                data: [20, 26, 35, 31, 47, 70, 63, 58, 86, 98, 145, 160]
+            },
+            revenue2025: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                label: 'Revenue 2025',
+                data: [25, 30, 40, 35, 50, 80, 70, 65, 90, 100, 150, 170]
+            },
+            revenue2026: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                label: 'Revenue 2026',
+                data: [40, 35, 45, 20, 55, 90, 80, 75, 60, 110, 160, 200]
+            },
+
+            // PIE CHART
+            colors: {
+                labels: ['Red', 'Blue', 'Yellow'],
+                data: [10, 10, 10],
+                backgroundColor: ['red', 'blue', 'yellow']
+            },
+            colors2: {
+                labels: ['Red', 'Blue', 'Green', 'Yellow'],
+                data: [25, 30, 20, 25],
+                backgroundColor: ['red', 'blue', 'green', 'yellow']
+            },
+            colors3: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green'],
+                data: [15, 35, 30, 20],
+                backgroundColor: ['red', 'blue', 'yellow', 'green']
+            },
+
+            // DOUGHNUT CHART
+            categories: {
+                labels: ['A', 'B', 'C'],
+                data: [10, 10, 10],
+                backgroundColor: ['purple', 'cyan', 'orange']
+            },
+            categories2: {
+                labels: ['Electronics', 'Clothing', 'Food', 'Other'],
+                data: [35, 25, 25, 15],
+                backgroundColor: ['purple', 'cyan', 'orange', 'green']
+            },
+            categories3: {
+                labels: ['New', 'Regular', 'Premium', 'Wholesale'],
+                data: [20, 35, 30, 15],
+                backgroundColor: ['purple', 'cyan', 'orange', 'green']
+            },
+
+            // RADAR CHART
+            player1: {
+                labels: ['Speed', 'Strength', 'Skill'],
+                label: 'Player 1',
+                data: [80, 90, 70],
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                borderColor: 'blue'
+            },
+            player2: {
+                labels: ['Speed', 'Strength', 'Skill'],
+                label: 'Player 2',
+                data: [65, 75, 90],
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                borderColor: 'red'
+            },
+            player3: {
+                labels: ['Speed', 'Strength', 'Skill'],
+                label: 'Player 3',
+                data: [90, 60, 80],
+                backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                borderColor: 'green'
+            },
+            player4: {
+                labels: ['Speed', 'Strength', 'Skill'],
+                label: 'Player 4',
+                data: [75, 85, 95],
+                backgroundColor: 'rgba(128, 0, 128, 0.2)',
+                borderColor: 'purple'
+            }
+        };
+
+        // Create charts
+        const chart1 = new Chart(document.getElementById('myChart1'), {
+            type: 'bar',
+            data: {
+                labels: chartData.sales.labels,
+                datasets: [{
+                    label: chartData.sales.label,
+                    data: chartData.sales.data,
+                    backgroundColor: chartData.sales.backgroundColor
+                }]
+            }
+        });
+
+        const chart2 = new Chart(document.getElementById('myChart2'), {
+            type: 'line',
+            data: {
+                labels: chartData.revenue.labels,
+                datasets: [{
+                    label: chartData.revenue.label,
+                    data: chartData.revenue.data,
+                    borderColor: 'blue',
+                    fill: true
+                }]
+            }
+        });
+
+        const chart3 = new Chart(document.getElementById('myChart3'), {
+            type: 'pie',
+            data: {
+                labels: chartData.colors.labels,
+                datasets: [{
+                    data: chartData.colors.data,
+                    backgroundColor: chartData.colors.backgroundColor
+                }]
+            }
+        });
+
+        const chart4 = new Chart(document.getElementById('myChart4'), {
+            type: 'doughnut',
+            data: {
+                labels: chartData.categories.labels,
+                datasets: [{
+                    data: chartData.categories.data,
+                    backgroundColor: chartData.categories.backgroundColor
+                }]
+            }
+        });
+
+        const chart5 = new Chart(document.getElementById('myChart5'), {
+            type: 'radar',
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100
+                    }
+                }
+            },
+            data: {
+                labels: chartData.player1.labels,
+                datasets: [{
+                    label: chartData.player1.label,
+                    data: chartData.player1.data,
+                    backgroundColor: chartData.player1.backgroundColor,
+                    borderColor: chartData.player1.borderColor
+                }]
+            }
+        });
+
+        // Update the selected chart
+        function updateChart(chart, selectId) {
+            const selectedValue = document.getElementById(selectId).value;
+            const selectedData = chartData[selectedValue];
+
+            if (!selectedData) return;
+
+            chart.data.labels = selectedData.labels;
+
+            if (chart.config.type === 'radar') {
+                chart.data.datasets = [{
+                    label: selectedData.label,
+                    data: selectedData.data,
+                    backgroundColor: selectedData.backgroundColor,
+                    borderColor: selectedData.borderColor
+                }];
+            } else if (chart.config.type === 'bar') {
+                chart.data.datasets[0].label = selectedData.label;
+                chart.data.datasets[0].data = selectedData.data;
+                chart.data.datasets[0].backgroundColor = selectedData.backgroundColor;
+            } else if (chart.config.type === 'line') {
+                chart.data.datasets[0].label = selectedData.label;
+                chart.data.datasets[0].data = selectedData.data;
+            } else {
+                chart.data.datasets[0].data = selectedData.data;
+                chart.data.datasets[0].backgroundColor = selectedData.backgroundColor;
+            }
+
+            chart.update();
+        }
+
+        // Button click events
+        document.getElementById('update1').addEventListener('click', () => {
+            updateChart(chart1, 'list1');
+        });
+
+        document.getElementById('update2').addEventListener('click', () => {
+            updateChart(chart2, 'list2');
+        });
+
+        document.getElementById('update3').addEventListener('click', () => {
+            updateChart(chart3, 'list3');
+        });
+
+        document.getElementById('update4').addEventListener('click', () => {
+            updateChart(chart4, 'list4');
+        });
+
+        document.getElementById('update5').addEventListener('click', () => {
+            updateChart(chart5, 'list5');
+        });
+    </script>
+</body>
+
+</html>
