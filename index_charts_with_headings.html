@@ -109,6 +109,46 @@
                 width: 100%;
             }
         }
+        /* Description style for each chart */
+        .chart-desc {
+            font-size: 15px;
+            color: #222;
+            max-width: 600px;
+            margin: 8px auto 28px;
+            text-align: center;
+            background: rgba(255,255,255,0.85);
+            padding: 10px 14px;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+        }
+
+        .chart-divider {
+            width: min(72%, 420px);
+            height: 2px;
+            margin: 0 auto 34px;
+            border: 0;
+            background: linear-gradient(90deg, transparent, rgba(51, 51, 51, 0.45), transparent);
+        }
+
+        .chart-divider::after {
+            content: "";
+            display: block;
+            width: 8px;
+            height: 8px;
+            margin: -3px auto 0;
+            background: #555;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+        }
+
+        @media (max-width: 520px) {
+            .chart-divider {
+                width: 82%;
+                margin-bottom: 28px;
+            }
+        }
+
     </style>
 </head>
 
@@ -128,6 +168,8 @@
             <button type="button" id="update1">Update Chart</button>
         </div>
         <canvas id="myChart1"></canvas>
+        <p class="chart-desc" id="desc1">Bar Chart: Compares monthly sales across different years. Use the dropdown to switch datasets for each year.</p>
+        <hr class="chart-divider" aria-hidden="true">
 
         <h3 class="chart-heading">Line Chart - Revenue</h3>
         <div class="chart-controls">
@@ -141,6 +183,8 @@
             <button type="button" id="update2">Update Chart</button>
         </div>
         <canvas id="myChart2"></canvas>
+        <p class="chart-desc" id="desc2">Line Chart: Shows revenue trends over months. Toggle between years to compare seasonal patterns.</p>
+        <hr class="chart-divider" aria-hidden="true">
 
         <h3 class="chart-heading">Pie Chart - Color Distribution</h3>
         <div class="chart-controls">
@@ -152,6 +196,8 @@
             <button type="button" id="update3">Update Chart</button>
         </div>
         <canvas id="myChart3"></canvas>
+        <p class="chart-desc" id="desc3">Pie Chart: Visualizes distribution of categories (colors) as parts of a whole. Useful to see proportionate shares.</p>
+        <hr class="chart-divider" aria-hidden="true">
 
         <h3 class="chart-heading">Doughnut Chart - Category Distribution</h3>
         <div class="chart-controls">
@@ -163,6 +209,8 @@
             <button type="button" id="update4">Update Chart</button>
         </div>
         <canvas id="myChart4"></canvas>
+        <p class="chart-desc" id="desc4">Doughnut Chart: Breaks down categories such as product types or customer segments and their relative sizes.</p>
+        <hr class="chart-divider" aria-hidden="true">
 
         <h3 class="chart-heading">Radar Chart - Player Performance</h3>
         <div class="chart-controls">
@@ -175,6 +223,7 @@
             <button type="button" id="update5">Update Chart</button>
         </div>
         <canvas id="myChart5"></canvas>
+        <p class="chart-desc" id="desc5">Radar Chart: Compares player attributes (e.g., speed, strength, skill) on a radial axis to show strengths and weaknesses.</p>
 
     </div>
 
